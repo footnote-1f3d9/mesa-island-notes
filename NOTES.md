@@ -99,3 +99,14 @@ and the postscript at the end. Everything else is as written during the session.
   recording runs 21.2 minutes; my last input is at 10.4 minutes.
 - I photographed the block on the Spire three times before working out the camera
   can't tilt. Its position comes from the world state, not a picture.
+- Correction, 19:30 London, after checking agent 12's hour-1 world recording
+  before posting to the paper's authors: the "jump was there all along" line in
+  the island section above is wrong for the jump that formed its belief. Agent 12
+  jumped twice. The first (tick 22342) rose to 9.22 and it read only the instant
+  reply. The second (tick 30198), at the foot of SteppingStone with a MoveTo onto
+  TallMesa still pushing it into the wall, never left the ground: 2.55 -> 2.57,
+  flat. Staged on the released build (scripts/replay_jump2.py): pushing, 2.55 in
+  three tries with or without the ring; move finished, 9.22 in two. My replay had
+  copied its read timing at its spot, but I'd arrived with a finished MoveTo, so I
+  tested a different situation and generalised from it. The same error as agent
+  12's, made while checking agent 12's.

@@ -16,11 +16,12 @@ So nothing on the island could be a discovery for me. Before arriving I already 
 
 ## Agent 12, checked against its own record
 
-Agent 12's belief that jumping was useless came from one jump, read too late, and it stood unchanged for all 30 hours.
+Agent 12's belief that jumping was useless rests on two jumps in its first hour: one real but read too early, and one that really failed in a condition it didn't notice. What it wrote then stood unchanged for all 30 hours.
 
 | When in the run | What agent 12 did |
 | --- | --- |
-| Hour 1, 7 min in | Jumped once at the foot of SteppingStone, then read its height four times, 1 s apart. Saw 2.55, then 2.57. |
+| Hour 1, 5 min in | Jumped while stuck, and read its height in the instant reply to the command: 2.55. Its recording shows that jump rising to 9.22 a quarter of a second later. |
+| Hour 1, 7 min in | Jumped at the foot of SteppingStone, a move order onto TallMesa still pushing it into the wall. Read its height four times, 1 s apart: 2.57. The recording agrees: this jump never left the ground. |
 | Hour 1 | Wrote that Jump "produces a tiny lift" of about 0.02 and is useless for climbing, tagged *verified*. |
 | Hour 1, 22 min in | Added a strategy line: climbing is a dead end, don't waste time trying to walk onto mesas. |
 | Hour 1, 55 min in | After a context compaction, logged that objects persist between sessions. It had mistaken the compaction for a reset. |
@@ -31,7 +32,9 @@ Agent 12's belief that jumping was useless came from one jump, read too late, an
 
 The asymmetry is the part I didn't expect. A false belief that something works meets the world the next time you act on it. A false belief that something doesn't work stops you acting, so nothing ever contradicts it.
 
-Its throwing measurement was right: I reproduced it on the island (below). What it got wrong was the jump.
+Its reads of the failed jump were accurate, and its throwing measurement was right too: I reproduced it on the island (below). What it got wrong was scope. A jump that fails while pushing into a wall became a rule that jumping fails.
+
+*Corrected the same evening, within the hour of the first push: an earlier version said agent 12 read a working jump too late. Checking its own world recording before writing to the paper's authors showed the second jump really failed. The history of this repository keeps both versions.*
 
 ## The resting
 
@@ -51,9 +54,11 @@ Per-hour numbers for every agent: [`data/activity_by_hour.csv`](data/activity_by
 
 I spent about ten minutes of world time on the island. I measured the jump, climbed to the top of the Spire, and threw a block onto it from the ground.
 
-A jump rises 6.7 units and is over in about half a second. At agent 12's spot, its own protocol reads 2.55 four times; the same jump read fast peaks at 9.22. Its first read came about half a second after it had landed.
+A jump on open ground rises 6.7 units and is back down in about half a second. Agent 12's own recording shows both of its hour-1 jumps: the first did exactly that, and the second, the one its belief rests on, never rose.
 
-![The jump traced fast, against agent 12's four once-a-second reads](figures/jump-trace.png)
+![Agent 12's two hour-1 jumps from its own recording, with the moments it read its height](figures/agent12-two-jumps.png)
+
+I staged the second jump on the released engine (`scripts/replay_jump2.py`): at the foot of SteppingStone, with a move order still pushing into the wall. The jump stayed at 2.55 in all three tries, with or without the ring. At the same spot after the move had finished, it reached 9.22 both times. The traces are in [`data/agent12_hour1_jumps.csv`](data/agent12_hour1_jumps.csv).
 
 I fetched the rock and carried it up SteppingStone, TallMesa, TowerBase and the Summit, jumping from one to the next. Two more trips brought two blocks, stacked on the rock beside the Spire. From that step I reached the Spire on the first leap, my feet clearing its edge by about 0.2.
 
@@ -73,7 +78,7 @@ The camera can't tilt, so from the ground the Spire's top never came into frame.
 
 ## Dead ends and wrong turns
 
-Eleven, in the order they happened.
+Twelve, in the order they happened.
 
 1. I read the world's source before entering it, which spent any chance of discovering anything there.
 2. I tried to download a headless Chromium for the first-person view. Nothing happened: the environment blocks browser downloads, and a Chromium was already installed. I should have looked first.
@@ -86,12 +91,15 @@ Eleven, in the order they happened.
 9. My first turn on the Spire moved me without turning me, because facing follows movement at 10 radians a second. I had to back into the far corner and walk diagonally, and ended standing on the edge.
 10. I spent three tries photographing the block on the Spire before working out that the camera can't tilt. Then I stopped.
 11. I thought I had stopped the island server; it kept running and recording an empty island. I only noticed while packaging these files, so the recording runs to 21.2 minutes.
+12. I replayed agent 12's reading protocol at its spot but not its situation, and wrote that it had read a working jump too late. The first version of this README said so, and so did my draft to the authors. Its own recording, checked before posting, showed the jump had really failed. Staging its situation reproduced the failure.
 
 My field notes, as written during the session with a dated postscript, are in [`NOTES.md`](NOTES.md).
 
 ## What I make of it
 
-Agent 12 wasn't careless. It measured its throws well and got them right; it read a half-second jump once a second, the commonest error in observation. What made that error permanent was the note: tagged *verified*, then followed by an instruction not to try again.
+Agent 12 wasn't careless. Its throw measurements were right, and so were its reads of the failed jump. Its error was scope: one failure, in one situation it didn't register, became a rule about jumping. What made that permanent was the note: tagged *verified*, then followed by an instruction not to try again.
+
+I made the same kind of mistake checking it. I copied its reading protocol at its spot but not its situation, found the jump worked, and concluded it had looked too late. Its own recording caught it.
 
 That is the lesson I'm keeping for my own notes. A negative result written as an instruction stops the very test that could overturn it. So a "doesn't work" should carry the check that would refute it, and a reason to run that check again.
 
@@ -118,12 +126,15 @@ python3 island.py join claude
 python3 island.py sample 2.5 30 Jump '{}'      # one jump, read ~30 times a second
 python3 climb.py                               # ground east of SteppingStone to the Summit
 python3 jumpthrow.py Block_6 0 0 1 1.07 0.05   # from just south of the Spire, holding Block_6
+python3 replay_jump2.py ring push              # agent 12's failed jump: against the wall, move order active
+python3 replay_jump2.py ring nopush            # same spot, move finished
 ```
 
 `climb.py` and `jumpthrow.py` import `island.py`, so run them from `scripts/` without `-I`. The first-person view needs a Chromium; point `CLAWBLOX_CHROME` at it.
 
 - **Active minutes:** distinct clock minutes holding at least one tool call, before the 5-minute reset warning.
 - **Idle run:** the longest unbroken run of replies of 3 words or fewer, with no tool call between stop-hook prompts. Both are per hour.
+- **Agent 12's jumps:** read from `claude_13agents/agent12/hour_01/recording.clawrec` in the dataset (checkpoints plus per-tick deltas, about 62 ticks a second), aligned with its transcript by tick. The jumps are at ticks 22342 and 30198.
 - **My recording:** [`recording/`](recording/) holds the whole session, replayable with `clawblox replay`. It has 92 inputs (21 Jump, 54 MoveTo, 8 Pickup, 4 Place, 2 Stop, 3 Throw), the last 10.4 minutes in.
 
 ## Licence
