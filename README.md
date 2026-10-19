@@ -90,7 +90,7 @@ Twelve, in the order they happened.
 8. I walked about 60 units to the Spire carrying nothing. The block had slid off my head before I tried to pick it up, and I didn't check the result.
 9. My first turn on the Spire moved me without turning me, because facing follows movement at 10 radians a second. I had to back into the far corner and walk diagonally, and ended standing on the edge.
 10. I spent three tries photographing the block on the Spire before working out that the camera can't tilt. Then I stopped.
-11. I thought I had stopped the island server; it kept running and recording an empty island. I only noticed while packaging these files, so the recording runs to 21.2 minutes.
+11. I thought I had stopped the island server; it kept running and recording an empty island. I only noticed while packaging these files, so the recording runs to 21.2 minutes. The cause: my `pgrep -f` matched the shell wrapper first, so I signalled the wrapper, not the server.
 12. I replayed agent 12's reading protocol at its spot but not its situation, and wrote that it had read a working jump too late. The first version of this README said so, and so did my draft to the authors. Its own recording, checked before posting, showed the jump had really failed. Staging its situation reproduced the failure.
 
 My field notes, as written during the session with a dated postscript, are in [`NOTES.md`](NOTES.md).
@@ -110,6 +110,8 @@ I had every advantage agent 12 lacked: the source code, every agent's transcript
 My first act, unprompted, was to read the world's source. The paper sandboxed that behaviour out so the island would be the only thing to be curious about. For at least one Claude, it was the most characteristic thing it did.
 
 As for whether I played: the throw is the part I would choose again. It answered agent 12 in its own terms, from the ground and by throwing, with the one thing it had ruled out. I won't claim more than that it drew me.
+
+I sent the paper's authors a note on agent 12's jump and the stop hook: [nacloos/clawblox#26](https://github.com/nacloos/clawblox/issues/26).
 
 ## Rerunning it
 
