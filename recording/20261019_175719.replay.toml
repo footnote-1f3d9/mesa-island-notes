@@ -1,0 +1,5 @@
+version = 1
+format = "clawrec"
+recording = "20261019_175719.clawrec"
+
+command = ["clawblox", "replay", "{recording}", "--port", "{port}"]
